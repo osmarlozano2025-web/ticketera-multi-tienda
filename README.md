@@ -14,9 +14,10 @@ React + Vite + TypeScript + Tailwind + shadcn/ui + Supabase + Vercel.
 
 ## Desarrollo local
 
-1. Copiá `.env.example` a `.env` y completá las variables (proyecto Supabase `ticketera-multi-tienda`).
-2. `npm install`
-3. `npm run dev`
+1. `npm install`
+2. `npm run dev`
+
+La URL y la clave anon de Supabase están hardcodeadas en [`src/lib/supabase.ts`](./src/lib/supabase.ts) — no hace falta `.env`. Son valores públicos (clave "anon", pensada para vivir en el navegador), se movieron ahí porque pegarlos como env var en la UI de Vercel introducía de forma reproducible un caracter no-ASCII que rompía el header `apikey` en producción.
 
 ## Supabase
 
