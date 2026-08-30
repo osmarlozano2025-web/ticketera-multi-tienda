@@ -9,7 +9,7 @@ Desglose de tareas a partir de `prd.md`, `diseno.md` y `tech-stack.md`. Se avanz
 - [x] Instalar shadcn/ui y configurar tema (paleta de `diseno.md` §1)
 - [x] Instalar React Router, TanStack Query, React Hook Form + Zod
 - [x] Crear proyecto en Supabase (vía MCP) y conectar variables de entorno (`SUPABASE_URL`, `SUPABASE_ANON_KEY`)
-- [ ] Configurar Vercel (vía MCP), conectar el repo, variables de entorno de producción — pendiente: falta vincular GitHub como login connection en la cuenta de Vercel
+- [x] Configurar Vercel (vía MCP), conectar el repo, variables de entorno de producción — auto-deploy en cada push a `main` verificado
 
 ## 1. Base de datos y seguridad
 - [x] Migración: tabla `empresas`
