@@ -3,48 +3,48 @@
 Desglose de tareas a partir de `prd.md`, `diseno.md` y `tech-stack.md`. Se avanza una funcionalidad a la vez, en el orden listado — no saltear.
 
 ## 0. Setup del proyecto
-- [ ] Crear repo Git dedicado para este proyecto (separado del monorepo de clientes)
-- [ ] Inicializar proyecto Vite + React + TypeScript
-- [ ] Instalar y configurar Tailwind CSS
-- [ ] Instalar shadcn/ui y configurar tema (paleta de `diseno.md` §1)
-- [ ] Instalar React Router, TanStack Query, React Hook Form + Zod
-- [ ] Crear proyecto en Supabase (vía MCP) y conectar variables de entorno (`SUPABASE_URL`, `SUPABASE_ANON_KEY`)
-- [ ] Configurar Vercel (vía MCP), conectar el repo, variables de entorno de producción
+- [x] Crear repo Git dedicado para este proyecto (separado del monorepo de clientes)
+- [x] Inicializar proyecto Vite + React + TypeScript
+- [x] Instalar y configurar Tailwind CSS
+- [x] Instalar shadcn/ui y configurar tema (paleta de `diseno.md` §1)
+- [x] Instalar React Router, TanStack Query, React Hook Form + Zod
+- [x] Crear proyecto en Supabase (vía MCP) y conectar variables de entorno (`SUPABASE_URL`, `SUPABASE_ANON_KEY`)
+- [ ] Configurar Vercel (vía MCP), conectar el repo, variables de entorno de producción — pendiente: falta vincular GitHub como login connection en la cuenta de Vercel
 
 ## 1. Base de datos y seguridad
-- [ ] Migración: tabla `empresas`
-- [ ] Migración: tabla `usuarios` (con `rol`, `grupo_id`, `empresa_id`)
-- [ ] Migración: tabla `grupos`
-- [ ] Migración: tabla `usuario_tiendas`
-- [ ] Migración: tabla `tiendas`
-- [ ] Migración: tabla `tickets` (con `numero_ticket`, `urgencia`, `tipo_tramite`, `estado`, `requiere_compra`, `requiere_logistica`)
-- [ ] Migración: tabla `ticket_fotos`
-- [ ] Migración: tabla `ticket_eventos`
-- [ ] Migración: tabla `ordenes_compra`
-- [ ] Migración: tabla `proveedores`
-- [ ] Migración: tabla `envios`
-- [ ] Función/secuencia Postgres para `numero_ticket` correlativo por `empresa_id`
-- [ ] Trigger Postgres: insertar fila en `ticket_eventos` en cada cambio de `estado` de un ticket
-- [ ] Políticas RLS por `empresa_id` en todas las tablas de negocio
-- [ ] Política RLS de bypass para `super_admin`
-- [ ] Bucket de Storage privado para fotos de tickets + policy de acceso por `empresa_id`
-- [ ] Seed de datos de prueba: 2 empresas, tiendas, usuarios de cada rol, algunos tickets en distintos estados
+- [x] Migración: tabla `empresas`
+- [x] Migración: tabla `usuarios` (con `rol`, `grupo_id`, `empresa_id`)
+- [x] Migración: tabla `grupos`
+- [x] Migración: tabla `usuario_tiendas`
+- [x] Migración: tabla `tiendas`
+- [x] Migración: tabla `tickets` (con `numero_ticket`, `urgencia`, `tipo_tramite`, `estado`, `requiere_compra`, `requiere_logistica`)
+- [x] Migración: tabla `ticket_fotos`
+- [x] Migración: tabla `ticket_eventos`
+- [x] Migración: tabla `ordenes_compra`
+- [x] Migración: tabla `proveedores`
+- [x] Migración: tabla `envios`
+- [x] Función/secuencia Postgres para `numero_ticket` correlativo por `empresa_id`
+- [x] Trigger Postgres: insertar fila en `ticket_eventos` en cada cambio de `estado` de un ticket
+- [x] Políticas RLS por `empresa_id` en todas las tablas de negocio
+- [x] Política RLS de bypass para `super_admin`
+- [x] Bucket de Storage privado para fotos de tickets + policy de acceso por `empresa_id`
+- [ ] Seed de datos de prueba: 2 empresas, tiendas, usuarios de cada rol, algunos tickets en distintos estados — depende de tener Auth armado (sección 2) para crear usuarios reales
 
 ## 2. Autenticación y layout base
 - [ ] Configurar Supabase Auth (email/password)
 - [ ] Pantalla de login
 - [ ] Edge Function `invite-user` (usa service role, llama `inviteUserByEmail`)
 - [ ] Flujo de aceptación de invitación (setear contraseña + crear fila en `usuarios`)
-- [ ] Layout base: sidebar colapsable + topbar (según `diseno.md` §2)
-- [ ] Lógica de menú condicional por rol (ocultar ítems según tabla de roles del PRD)
+- [x] Layout base: sidebar colapsable + topbar (según `diseno.md` §2)
+- [x] Lógica de menú condicional por rol (ocultar ítems según tabla de roles del PRD) — hecho sobre una sesión simulada (`mock-session.tsx`) mientras no está Auth; reemplazar por la sesión real de Supabase
 - [ ] Guard de rutas: redirigir según rol si intenta acceder a un módulo sin permiso
-- [ ] Layout separado para `super_admin` (sin las secciones de empresa)
+- [ ] Layout separado para `super_admin` (sin las secciones de empresa) — la página existe (`/super-admin`) pero falta el guard que la aisle del resto
 
 ## 3. Módulo Tickets
-- [ ] Vista lista: tabs por estado con contador (`diseno.md` §3.1)
+- [x] Vista lista: tabs por estado con contador (`diseno.md` §3.1) — tabs UI listos, falta filtrar la query real por estado al cambiar de tab
 - [ ] Vista lista: filtros rápidos (tienda, grupo, urgencia)
-- [ ] Vista lista: fila de ticket con badges de estado/urgencia/compra/logística
-- [ ] Estado vacío de la lista
+- [x] Vista lista: fila de ticket con badges de estado/urgencia/compra/logística
+- [x] Estado vacío de la lista
 - [ ] Formulario de alta de ticket (modal fullscreen, `diseno.md` §3.3), con upload de fotos a Storage
 - [ ] Vista detalle de ticket: columna principal (datos, fotos, timeline, comentarios)
 - [ ] Vista detalle de ticket: columna lateral (estado + botón de transición según matriz PRD §2.1, asignación de grupo, toggles requiere_compra/requiere_logistica)
