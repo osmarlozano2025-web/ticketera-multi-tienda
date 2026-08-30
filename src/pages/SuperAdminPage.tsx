@@ -19,6 +19,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { EmptyState } from '@/components/shared/EmptyState'
+import { InvitarUsuarioDialog } from '@/components/shared/InvitarUsuarioDialog'
 import { supabase } from '@/lib/supabase'
 import type { Empresa } from '@/lib/types'
 
@@ -110,6 +111,7 @@ export function SuperAdminPage() {
               <TableHead>Nombre</TableHead>
               <TableHead>Estado</TableHead>
               <TableHead>Creada</TableHead>
+              <TableHead />
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -123,6 +125,14 @@ export function SuperAdminPage() {
                 </TableCell>
                 <TableCell className="text-muted-foreground">
                   {new Date(empresa.creado_en).toLocaleDateString('es-AR')}
+                </TableCell>
+                <TableCell className="text-right">
+                  <InvitarUsuarioDialog
+                    empresaId={empresa.id}
+                    rol="admin"
+                    triggerLabel="Invitar admin"
+                    invalidateKey={['empresas']}
+                  />
                 </TableCell>
               </TableRow>
             ))}

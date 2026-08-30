@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { ProtectedRoute, RequireRole } from '@/components/layout/ProtectedRoute'
 import { useAuth } from '@/lib/auth'
+import { AcceptInvitationPage } from '@/pages/AcceptInvitationPage'
 import { LoginPage } from '@/pages/LoginPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
 import { SuperAdminPage } from '@/pages/SuperAdminPage'
@@ -70,6 +71,7 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/aceptar-invitacion" element={<AcceptInvitationPage />} />
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
           <Route index element={<HomeRedirect />} />

@@ -33,8 +33,8 @@ Desglose de tareas a partir de `prd.md`, `diseno.md` y `tech-stack.md`. Se avanz
 ## 2. Autenticación y layout base
 - [x] Configurar Supabase Auth (email/password) — usuario super_admin real creado (`osmar.lozano.2025@gmail.com`)
 - [x] Pantalla de login
-- [ ] Edge Function `invite-user` (usa service role, llama `inviteUserByEmail`)
-- [ ] Flujo de aceptación de invitación (setear contraseña + crear fila en `usuarios`)
+- [x] Edge Function `invite-user` (usa service role, llama `inviteUserByEmail`) — verifica permiso del que invita (admin de su empresa o super_admin), crea la fila en `usuarios`
+- [x] Flujo de aceptación de invitación (`/aceptar-invitacion`, setea contraseña vía `auth.updateUser`) — probado de punta a punta
 - [x] Layout base: sidebar colapsable + topbar (según `diseno.md` §2)
 - [x] Lógica de menú condicional por rol (ocultar ítems según tabla de roles del PRD) — sobre sesión real (`lib/auth.tsx`)
 - [x] Guard de rutas: `ProtectedRoute` + `RequireRole` redirigen según sesión y rol
@@ -78,7 +78,7 @@ Desglose de tareas a partir de `prd.md`, `diseno.md` y `tech-stack.md`. Se avanz
 - [ ] Dashboard con tarjetas KPI (empresas activas, tickets totales, usuarios totales, empresas nuevas del mes)
 - [x] Tabla de empresas (nombre, estado, fecha de creación) — falta sumar columnas de tiendas/usuarios/tickets
 - [ ] Acción suspender/activar empresa
-- [x] Alta de nueva empresa (`+ Nueva empresa`) — falta todavía crear el admin inicial de esa empresa (depende de la Edge Function de invitación, sección 2)
+- [x] Alta de nueva empresa (`+ Nueva empresa`) + invitación del admin inicial (`Invitar admin` por fila, vía Edge Function `invite-user`)
 
 ## 9. Pulido final
 - [ ] Revisión responsive (sidebar colapsado en mobile, formulario de alta de ticket usable desde celular)
