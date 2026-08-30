@@ -1,4 +1,4 @@
-import { ChevronDown, Search } from 'lucide-react'
+import { ChevronDown, LogOut, Search } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { SidebarTrigger } from '@/components/ui/sidebar'
-import { ROLES_DISPONIBLES, useMockSession } from '@/lib/mock-session'
+import { useAuth } from '@/lib/auth'
 
 const ROL_LABEL: Record<string, string> = {
   super_admin: 'Super Admin',
@@ -21,7 +21,8 @@ const ROL_LABEL: Record<string, string> = {
 }
 
 export function TopBar() {
-  const { user, setRol } = useMockSession()
+  const { usuario, signOut } = useAuth()
+  if (!usuario) return null
 
   return (
     <header className="flex h-14 items-center gap-4 border-b border-border px-4">
@@ -33,19 +34,21 @@ export function TopBar() {
       <DropdownMenu>
         <DropdownMenuTrigger className="flex items-center gap-2 text-sm">
           <span className="flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground">
-            {user.nombre.charAt(0)}
+            {usuario.nombre.charAt(0)}
           </span>
-          <span className="hidden sm:inline">{user.nombre}</span>
+          <span className="hidden sm:inline">{usuario.nombre}</span>
           <ChevronDown className="size-4 text-muted-foreground" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Ver como (demo)</DropdownMenuLabel>
+          <DropdownMenuLabel>
+            {usuario.email}
+            <span className="block text-xs font-normal text-muted-foreground">{ROL_LABEL[usuario.rol]}</span>
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {ROLES_DISPONIBLES.map((rol) => (
-            <DropdownMenuItem key={rol} onClick={() => setRol(rol)}>
-              {ROL_LABEL[rol]}
-            </DropdownMenuItem>
-          ))}
+          <DropdownMenuItem onClick={() => signOut()}>
+            <LogOut />
+            Cerrar sesión
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

@@ -1,7 +1,11 @@
-import { Building2, LayoutDashboard, ShoppingCart, Truck, Users } from 'lucide-react'
+import { Building2, ShoppingCart, Truck, Users } from 'lucide-react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '@/components/layout/AppLayout'
+import { ProtectedRoute, RequireRole } from '@/components/layout/ProtectedRoute'
+import { useAuth } from '@/lib/auth'
+import { LoginPage } from '@/pages/LoginPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
+import { SuperAdminPage } from '@/pages/SuperAdminPage'
 import { TicketsPage } from '@/pages/TicketsPage'
 
 function ComprasPage() {
@@ -54,29 +58,70 @@ function EquipoPage() {
   )
 }
 
-function SuperAdminPage() {
-  return (
-    <PlaceholderPage
-      titulo="Empresas"
-      subtitulo="Todas las empresas registradas en la plataforma"
-      icon={LayoutDashboard}
-      vacioTitulo="Sin empresas registradas"
-      vacioDescripcion="Las empresas que se den de alta van a aparecer acá."
-    />
-  )
+function HomeRedirect() {
+  const { usuario } = useAuth()
+  if (!usuario) return null
+  return <Navigate to={usuario.rol === 'super_admin' ? '/super-admin' : '/tickets'} replace />
 }
+
+const ROLES_EMPRESA = ['admin', 'encargado', 'operario', 'compras', 'logistica'] as const
 
 function App() {
   return (
     <Routes>
-      <Route element={<AppLayout />}>
-        <Route index element={<Navigate to="/tickets" replace />} />
-        <Route path="/tickets" element={<TicketsPage />} />
-        <Route path="/compras" element={<ComprasPage />} />
-        <Route path="/logistica" element={<LogisticaPage />} />
-        <Route path="/tiendas" element={<TiendasPage />} />
-        <Route path="/equipo" element={<EquipoPage />} />
-        <Route path="/super-admin" element={<SuperAdminPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route element={<ProtectedRoute />}>
+        <Route element={<AppLayout />}>
+          <Route index element={<HomeRedirect />} />
+          <Route
+            path="/tickets"
+            element={
+              <RequireRole roles={[...ROLES_EMPRESA]}>
+                <TicketsPage />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="/compras"
+            element={
+              <RequireRole roles={['admin', 'compras']}>
+                <ComprasPage />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="/logistica"
+            element={
+              <RequireRole roles={['admin', 'logistica']}>
+                <LogisticaPage />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="/tiendas"
+            element={
+              <RequireRole roles={['admin']}>
+                <TiendasPage />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="/equipo"
+            element={
+              <RequireRole roles={['admin']}>
+                <EquipoPage />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="/super-admin"
+            element={
+              <RequireRole roles={['super_admin']}>
+                <SuperAdminPage />
+              </RequireRole>
+            }
+          />
+        </Route>
       </Route>
     </Routes>
   )

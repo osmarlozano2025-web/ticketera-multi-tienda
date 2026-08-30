@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import { MockSessionProvider } from '@/lib/mock-session'
+import { AuthProvider } from '@/lib/auth'
 import './index.css'
 
 const queryClient = new QueryClient()
@@ -13,14 +13,14 @@ const queryClient = new QueryClient()
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <MockSessionProvider>
+      <AuthProvider>
         <TooltipProvider>
           <BrowserRouter>
             <App />
           </BrowserRouter>
           <Toaster />
         </TooltipProvider>
-      </MockSessionProvider>
+      </AuthProvider>
     </QueryClientProvider>
   </StrictMode>,
 )

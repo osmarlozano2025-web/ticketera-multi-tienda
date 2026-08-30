@@ -31,14 +31,14 @@ Desglose de tareas a partir de `prd.md`, `diseno.md` y `tech-stack.md`. Se avanz
 - [ ] Seed de datos de prueba: 2 empresas, tiendas, usuarios de cada rol, algunos tickets en distintos estados — depende de tener Auth armado (sección 2) para crear usuarios reales
 
 ## 2. Autenticación y layout base
-- [ ] Configurar Supabase Auth (email/password)
-- [ ] Pantalla de login
+- [x] Configurar Supabase Auth (email/password) — usuario super_admin real creado (`osmar.lozano.2025@gmail.com`)
+- [x] Pantalla de login
 - [ ] Edge Function `invite-user` (usa service role, llama `inviteUserByEmail`)
 - [ ] Flujo de aceptación de invitación (setear contraseña + crear fila en `usuarios`)
 - [x] Layout base: sidebar colapsable + topbar (según `diseno.md` §2)
-- [x] Lógica de menú condicional por rol (ocultar ítems según tabla de roles del PRD) — hecho sobre una sesión simulada (`mock-session.tsx`) mientras no está Auth; reemplazar por la sesión real de Supabase
-- [ ] Guard de rutas: redirigir según rol si intenta acceder a un módulo sin permiso
-- [ ] Layout separado para `super_admin` (sin las secciones de empresa) — la página existe (`/super-admin`) pero falta el guard que la aisle del resto
+- [x] Lógica de menú condicional por rol (ocultar ítems según tabla de roles del PRD) — sobre sesión real (`lib/auth.tsx`)
+- [x] Guard de rutas: `ProtectedRoute` + `RequireRole` redirigen según sesión y rol
+- [x] Layout separado para `super_admin` (sin las secciones de empresa)
 
 ## 3. Módulo Tickets
 - [x] Vista lista: tabs por estado con contador (`diseno.md` §3.1) — tabs UI listos, falta filtrar la query real por estado al cambiar de tab
@@ -76,9 +76,9 @@ Desglose de tareas a partir de `prd.md`, `diseno.md` y `tech-stack.md`. Se avanz
 
 ## 8. Panel Super Admin
 - [ ] Dashboard con tarjetas KPI (empresas activas, tickets totales, usuarios totales, empresas nuevas del mes)
-- [ ] Tabla de empresas (alta, tiendas, usuarios, tickets, estado)
+- [x] Tabla de empresas (nombre, estado, fecha de creación) — falta sumar columnas de tiendas/usuarios/tickets
 - [ ] Acción suspender/activar empresa
-- [ ] Flujo de alta de nueva empresa (registro de tenant + admin inicial)
+- [x] Alta de nueva empresa (`+ Nueva empresa`) — falta todavía crear el admin inicial de esa empresa (depende de la Edge Function de invitación, sección 2)
 
 ## 9. Pulido final
 - [ ] Revisión responsive (sidebar colapsado en mobile, formulario de alta de ticket usable desde celular)

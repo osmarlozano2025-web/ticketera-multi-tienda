@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import { Building2, LayoutDashboard, ShoppingCart, Ticket, Truck, Users } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import {
@@ -11,7 +12,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import { useMockSession } from '@/lib/mock-session'
+import { useAuth } from '@/lib/auth'
+import { supabase } from '@/lib/supabase'
 import type { Rol } from '@/lib/types'
 
 interface NavItem {
@@ -65,10 +67,25 @@ function NavGroup({ label, items, rol }: { label: string; items: NavItem[]; rol:
   )
 }
 
-export function AppSidebar() {
-  const { user } = useMockSession()
+function useEmpresaNombre(empresaId: string | null) {
+  return useQuery({
+    queryKey: ['empresa-nombre', empresaId],
+    queryFn: async () => {
+      if (!empresaId) return null
+      const { data } = await supabase.from('empresas').select('nombre').eq('id', empresaId).single()
+      return data?.nombre ?? null
+    },
+    enabled: !!empresaId,
+  })
+}
 
-  if (user.rol === 'super_admin') {
+export function AppSidebar() {
+  const { usuario } = useAuth()
+  const { data: empresaNombre } = useEmpresaNombre(usuario?.empresa_id ?? null)
+
+  if (!usuario) return null
+
+  if (usuario.rol === 'super_admin') {
     return (
       <Sidebar>
         <SidebarHeader className="px-3 py-4">
@@ -76,7 +93,7 @@ export function AppSidebar() {
           <span className="text-xs text-muted-foreground">Panel Super Admin</span>
         </SidebarHeader>
         <SidebarContent>
-          <NavGroup label="Plataforma" items={SUPER_ADMIN} rol={user.rol} />
+          <NavGroup label="Plataforma" items={SUPER_ADMIN} rol={usuario.rol} />
         </SidebarContent>
       </Sidebar>
     )
@@ -86,11 +103,11 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader className="px-3 py-4">
         <span className="text-lg font-bold tracking-tight">Ticketera</span>
-        <span className="text-xs text-muted-foreground">{user.empresaNombre}</span>
+        <span className="text-xs text-muted-foreground">{empresaNombre ?? '...'}</span>
       </SidebarHeader>
       <SidebarContent>
-        <NavGroup label="Operación" items={OPERACION} rol={user.rol} />
-        <NavGroup label="Gestión" items={GESTION} rol={user.rol} />
+        <NavGroup label="Operación" items={OPERACION} rol={usuario.rol} />
+        <NavGroup label="Gestión" items={GESTION} rol={usuario.rol} />
       </SidebarContent>
     </Sidebar>
   )
